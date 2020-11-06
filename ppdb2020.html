@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <div id="main" class="row justify-content-center">
+            <div id="main" style="display:none" class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="row justify-content-center">
                         <div class="col">
@@ -34,7 +34,7 @@
                     <div class="row">
                         <div class="col">
                             <!--<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSePhjZuj90ZeQOrJeLhRbC6TR4DzTRFs8pXvig0w0-Z9s7A0g/viewform?embedded=true" width="100%" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>-->
-                            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSePhjZuj90ZeQOrJeLhRbC6TR4DzTRFs8pXvig0w0-Z9s7A0g/viewform?embedded=true" frameborder="0" scrolling="yes" seamless="seamless" style="display:block; width:100%; height:100vh;"></iframe>
+                            <iframe id="gform" src="" frameborder="0" scrolling="yes" seamless="seamless" style="display:block; width:100%; height:100vh;"></iframe>
                         </div>
                     </div>
                 </div>
@@ -70,10 +70,11 @@
             var rasasia = "kenobi";
             var terkunci = true;
             var soal = [
-                ["www.google.com", "[SMA] Pesantren", 30],
-                ["www.google.com", "[SMA] Akademis", 60],
-                ["www.google.com", "[SMP] Pesantren", 30],
-                ["www.google.com", "[SMP] Akademis", 0.1],
+                ["https://docs.google.com/forms/d/e/1FAIpQLScyR1I75efBrCBufVJMWA_wZwo_5PjY3cLV_oI2FjnKaf5sxw/viewform", "[SMA] Pesantren", 35],
+                ["https://docs.google.com/forms/d/e/1FAIpQLSctcDTZlGimLORUsnkpR-dGgubrlegZ_fjfy83wkHIxvEvqIg/viewform", "[SMA] Akademis", 65],
+                ["https://docs.google.com/forms/d/e/1FAIpQLSfLUMK_uT70x-CO4Z4TmtmGyOeS00iMqr2A-ehAhBcMP2KTxg/viewform", "[SMP] Pesantren", 35],
+                ["https://docs.google.com/forms/d/e/1FAIpQLSd5Q2cMTxtgrjP6kCTvWaqiiTs-BrQKYbIbyAJUG1LFb4KOMA/viewform", "[SMP] Akademis", 65]
+                //["https://docs.google.com/forms/d/e/1FAIpQLSePhjZuj90ZeQOrJeLhRbC6TR4DzTRFs8pXvig0w0-Z9s7A0g/viewform", "[SMP] coba", 0.9],
             ];
             var time = 0;
             function updateUi() {
@@ -105,6 +106,7 @@
                 })
                 $("#kunci").on("input", function() {$("#kunciError").hide()});
                 $('[id^="soal"]').click(function() {
+                    $("#gform").attr("src", soal[parseInt($(this).attr("id").replace("soal", ""))][0]);
                     time = soal[parseInt($(this).attr("id").replace("soal", ""))][2]*60000;
                     $("#home").hide();
                     $("#main").show();
