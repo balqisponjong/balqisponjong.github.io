@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PPDB SMP-SMA Baitul Qur'an</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div id="home" class="row vh-100 align-items-center justify-content-center">
+                <div class="col-md-8">
+                    <h1>PPDB SMP-SMA Baitul Qur'an 2020</h1>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Soal</th>
+                                <th scope="col">Waktu</th>
+                            </tr>
+                        </thead>
+                        <tbody id="daftarSoal">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="main" class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="row justify-content-center">
+                        <div class="col">
+                            <h2 id="timerText" class="text-center mt-3"></h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <!--<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSePhjZuj90ZeQOrJeLhRbC6TR4DzTRFs8pXvig0w0-Z9s7A0g/viewform?embedded=true" width="100%" height="520" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>-->
+                            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSePhjZuj90ZeQOrJeLhRbC6TR4DzTRFs8pXvig0w0-Z9s7A0g/viewform?embedded=true" frameborder="0" scrolling="yes" seamless="seamless" style="display:block; width:100%; height:100vh;"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="prompt" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Hubungi Panitia Untuk Membuka Kunci!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="kunci" placeholder="Password">
+                        </div>
+                        <h6 style="display:none" id="kunciError" class="text-danger">Password salah!</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="bukaKunci">Buka</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script>
+            var rasasia = "kenobi";
+            var terkunci = true;
+            var soal = [
+                ["www.google.com", "[SMA] Pesantren", 30],
+                ["www.google.com", "[SMA] Akademis", 60],
+                ["www.google.com", "[SMP] Pesantren", 30],
+                ["www.google.com", "[SMP] Akademis", 0.1],
+            ];
+            var time = 0;
+            function updateUi() {
+                var tmp = "";
+                var n = 0;
+                soal.forEach(function(r) {
+                    tmp += "<tr>"
+                    for (i=1; i<3; i++) {
+                        if (i==2) {
+                            tmp += `<td><button id="waktu${n}" type="button" class="btn btn-warning btn-block">${r[i]} menit</button></td>`
+                        } else {
+                            tmp += `<td><button id="soal${n}" type="button" class="btn btn-primary btn-block">${r[i]}</button></td>`
+                        }
+                    }
+                    tmp += "</tr>"
+                    n++;
+                })
+                $("#daftarSoal").html(tmp);
+            }
+            updateUi();
+            $(document).ready(function () {
+                $("#bukaKunci").click(function() {
+                    if ($("#kunci").val().includes(rasasia)) {
+                        terkunci = false;
+                        $("#prompt").modal("hide");
+                    } else {
+                        $("#kunciError").show();
+                    }
+                })
+                $("#kunci").on("input", function() {$("#kunciError").hide()});
+                $('[id^="soal"]').click(function() {
+                    time = soal[parseInt($(this).attr("id").replace("soal", ""))][2]*60000;
+                    $("#home").hide();
+                    $("#main").show();
+                    var delta = time;
+                    var timer_text;
+                    setInterval(function() {
+                        if (delta >= 0) {
+                            //var days = Math.floor(delta / (1000 * 60 * 60 * 24));
+                            var hours = Math.floor((delta % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            var mins = Math.floor((delta % (1000 * 60 * 60)) / (1000 * 60));
+                            var secs = Math.floor((delta % (1000 * 60)) / 1000);
+                            timer_text = `${hours} jam ${mins} menit ${secs} detik`;
+                            $("#timerText").text(timer_text);
+                            //if (delta/1000 < 60) {
+                            //}
+                            //if ( delta/1000 < 600 ) {
+                            //}
+                            delta -= 1000;
+                        } else {
+                            $(".container-fluid").css("background-color", "red");
+                            if (terkunci) {
+                                $("#prompt").modal("show");
+                            } else {
+                                $(".container-fluid").css("background-color", "white");
+                            };
+                        }
+                    }, 1000);
+                })
+            })
+        </script>
+        <!--<script>-->
+            <!--var deadlineStr = "{{ data.deadline }}"-->
+                <!--if (deadlineStr != "") {-->
+                <!--$.ajax({-->
+                <!--url: "http://worldtimeapi.org/api/timezone/Asia/Jakarta",-->
+                <!--success: function(r) {-->
+                <!--var deadline = new Date(deadlineStr).getTime();-->
+                <!--var now = new Date(r.datetime).getTime();-->
+                <!--var delta = deadline - now;-->
+                <!--$("#batasWaktu").show();-->
+                <!--setInterval(function() {-->
+                <!--if (delta >= 0) {-->
+                <!--var days = Math.floor(delta / (1000 * 60 * 60 * 24));-->
+                <!--var hours = Math.floor((delta % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));-->
+                <!--var mins = Math.floor((delta % (1000 * 60 * 60)) / (1000 * 60));-->
+                <!--var secs = Math.floor((delta % (1000 * 60)) / 1000);-->
+                <!--$("#cdHari").text((days).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}));-->
+                <!--$("#cdJam").text((hours).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}));-->
+                <!--$("#cdMenit").text((mins).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}));-->
+                <!--$("#cdDetik").text((secs).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}));-->
+                <!--if (delta/1000 < 60) {-->
+                <!--$("#timer").removeClass("text-success");-->
+                <!--$("#timer").removeClass("text-warning");-->
+                <!--$("#timer").addClass("text-danger");-->
+
+                <!--}-->
+                <!--if ( delta/1000 < 600 ) {-->
+                <!--$("#timer").removeClass("text-success");-->
+                <!--$("#timer").addClass("text-warning");-->
+                <!--}-->
+                <!--delta -= 1000;-->
+                <!--}-->
+                <!--}, 1000)-->
+                <!--}-->
+                <!--})-->
+                <!--}-->
+                <!--</script>-->
+    </body>
+</html>
