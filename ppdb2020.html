@@ -77,6 +77,9 @@
                 //["https://docs.google.com/forms/d/e/1FAIpQLSePhjZuj90ZeQOrJeLhRbC6TR4DzTRFs8pXvig0w0-Z9s7A0g/viewform", "[SMP] coba", 0.9],
             ];
             var time = 0;
+            var delta;
+            var startFocus;
+            var lastFocus;
             function updateUi() {
                 var tmp = "";
                 var n = 0;
@@ -103,14 +106,23 @@
                     } else {
                         $("#kunciError").show();
                     }
-                })
+                });
                 $("#kunci").on("input", function() {$("#kunciError").hide()});
                 $('[id^="soal"]').click(function() {
+                    $(window).blur(function() {
+                        lastFocus = Date.now();
+                        $("#prompt").modal("show");
+                        //alert("Apakah anda meninggalkan quiz?")
+                    });
+                    $(window).focus(function() {
+                        elapsedTime = Date.now() - lastFocus;
+                        delta -= elapsedTime;
+                    })
                     $("#gform").attr("src", soal[parseInt($(this).attr("id").replace("soal", ""))][0]);
                     time = soal[parseInt($(this).attr("id").replace("soal", ""))][2]*60000;
                     $("#home").hide();
                     $("#main").show();
-                    var delta = time;
+                    delta = time;
                     var timer_text;
                     setInterval(function() {
                         if (delta >= 0) {
