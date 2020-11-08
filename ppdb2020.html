@@ -102,6 +102,7 @@
                 $("#bukaKunci").click(function() {
                     if ($("#kunci").val().includes(rasasia)) {
                         terkunci = false;
+                        $("#kunci").val("");
                         $("#prompt").modal("hide");
                     } else {
                         $("#kunciError").show();
@@ -111,7 +112,15 @@
                 $('[id^="soal"]').click(function() {
                     $(window).blur(function() {
                         //lastFocus = Date.now();
+                        terkunci = true;
                         $("#prompt").modal("show");
+                        var localTerkunci = setInterval(function() {
+                            if (!terkunci) {
+                                localTerkunci = 0;
+                            } else {
+                                $("#prompt").modal("show");
+                            }
+                        }, 1);
                         //alert("Apakah anda meninggalkan quiz?")
                     });
                     //$(window).focus(function() {
