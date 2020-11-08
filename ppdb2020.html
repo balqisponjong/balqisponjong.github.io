@@ -110,14 +110,14 @@
                 $("#kunci").on("input", function() {$("#kunciError").hide()});
                 $('[id^="soal"]').click(function() {
                     $(window).blur(function() {
-                        lastFocus = Date.now();
+                        //lastFocus = Date.now();
                         $("#prompt").modal("show");
                         //alert("Apakah anda meninggalkan quiz?")
                     });
-                    $(window).focus(function() {
-                        elapsedTime = Date.now() - lastFocus;
-                        delta -= elapsedTime;
-                    })
+                    //$(window).focus(function() {
+                    //    elapsedTime = Date.now() - lastFocus;
+                    //    delta -= elapsedTime;
+                    //})
                     $("#gform").attr("src", soal[parseInt($(this).attr("id").replace("soal", ""))][0]);
                     time = soal[parseInt($(this).attr("id").replace("soal", ""))][2]*60000;
                     $("#home").hide();
